@@ -9,10 +9,10 @@ from django.urls import reverse
 User = get_user_model()
 
 #this function help to build url to all models(smart,note) to show them in one template product_detail.html 
+# obj is product(smart,note) and viewname is name in our urls.py
 def get_product_url(obj, viewname):
     ct_model = obj.__class__._meta.model_name
     return reverse(viewname, kwargs={'ct_model': ct_model, 'slug': obj.slug})
-
 
 
 
@@ -83,6 +83,7 @@ class Notebook(Product):
         return "{} : {}".format(self.category.name, self.title)
 
     def get_absolute_url(self):
+        #'product_detail' is name in our urls.py
         return get_product_url(self, 'product_detail')
 
 class Smartphone(Product):

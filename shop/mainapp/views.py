@@ -22,6 +22,8 @@ class ProductDetailView(DetailView):
 
     #model = Model
     #queryset = Model.objects.all()
+
+    # product is name fin our template
     context_object_name = 'product'
     template_name='product_detail.html'
     slug_url_kwarg = 'slug'
