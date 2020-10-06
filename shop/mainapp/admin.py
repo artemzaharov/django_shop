@@ -2,9 +2,10 @@ from django.forms import ModelChoiceField
 from django.contrib import admin
 from .models import *
 
-#if we create a notebook there is no choice to change it to smartphone we need forms
-class NotebookAdmin(admin.ModelAdmin):
+# if we create a notebook there is no choice to change it to smartphone we need forms
 
+
+class NotebookAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
@@ -14,12 +15,11 @@ class NotebookAdmin(admin.ModelAdmin):
 
 class SmartphoneAdmin(admin.ModelAdmin):
 
-    
-
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
             return ModelChoiceField(Category.objects.filter(slug='smartphones'))
         return super().formfield_for_foreignkey(self, db_field, request, **kwargs)
+
 
 admin.site.register(Category)
 admin.site.register(Notebook, NotebookAdmin)

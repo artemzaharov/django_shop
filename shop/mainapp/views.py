@@ -3,9 +3,8 @@ from django.views.generic import DetailView
 from .models import Notebook, Smartphone
 
 
-
 def test_view(request):
-    return render(request, 'base.html',{})
+    return render(request, 'base.html', {})
 
 
 class ProductDetailView(DetailView):
@@ -25,5 +24,5 @@ class ProductDetailView(DetailView):
 
     # product is name fin our template
     context_object_name = 'product'
-    template_name='product_detail.html'
+    template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'

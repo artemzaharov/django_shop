@@ -1,4 +1,4 @@
-#we will create custome tags to use them in templates
+# we will create custome tags to use them in templates
 from django import template
 from django.utils.safestring import mark_safe
 
@@ -22,24 +22,24 @@ TABLE_CONTENT = '''
                 '''
 
 PRODUCT_SPEC = {
-    'notebook' : {
-        'Диагональ':'diagonal',
-        'Тип дисплея':'display_type',
-        'Частота процессора':'processor_freq',
-        'Оперативная память':'ram',
-        'ВидеоКарта':'video',
-        'Время работы аккумулятора':'time_without_charge'
+    'notebook': {
+        'Диагональ': 'diagonal',
+        'Тип дисплея': 'display_type',
+        'Частота процессора': 'processor_freq',
+        'Оперативная память': 'ram',
+        'ВидеоКарта': 'video',
+        'Время работы аккумулятора': 'time_without_charge'
     },
-     'smartphone' : {
-        'Диагональ':'diagonal',
-        'Тип дисплея':'display_type',
-        'Разрешение экрана':'resolution',
-        'Объем батареи':'accum_volume',
-        'Оперативная память':'ram',
-        'Карта памяти':'sd',
-        'Максимальный объем встраиваймой памяти':'sd_volume_max',
-        'Главная камера':'main_cam_mp',
-        'Фронтальная камера':'frontal_cam_mp'
+    'smartphone': {
+        'Диагональ': 'diagonal',
+        'Тип дисплея': 'display_type',
+        'Разрешение экрана': 'resolution',
+        'Объем батареи': 'accum_volume',
+        'Оперативная память': 'ram',
+        'Карта памяти': 'sd',
+        'Максимальный объем встраиваймой памяти': 'sd_volume_max',
+        'Главная камера': 'main_cam_mp',
+        'Фронтальная камера': 'frontal_cam_mp'
     }
 }
 
@@ -47,8 +47,10 @@ PRODUCT_SPEC = {
 def get_product_spec(product, model_name):
     table_content = ''
     for name, value in PRODUCT_SPEC[model_name].items():
-        table_content += TABLE_CONTENT.format(name=name, value=getattr(product, value))
+        table_content += TABLE_CONTENT.format(name=name,
+                                              value=getattr(product, value))
     return table_content
+
 
 @register.filter
 def product_spec(product):
