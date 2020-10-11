@@ -14,15 +14,17 @@ class ProductDetailView(DetailView):
         'smartphone': Smartphone
     }
 
+    # we use view method dispatch to find model and get queryset(we used it because of ct_models)
     def dispatch(self, request, *args, **kwargs):
+        # here we take ct_model from url
         self.model = self.CT_MODEL_MODEL_CLASS[kwargs['ct_model']]
         self.queryset = self.model._base_manager.all()
         return super().dispatch(request, *args, **kwargs)
 
-    #model = Model
-    #queryset = Model.objects.all()
+    # model = Model
+    # queryset = Model.objects.all()
 
-    # product is name fin our template
+    # context_object_name It's just a human-understandable name of variable to access from templates 
     context_object_name = 'product'
     template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'

@@ -1,22 +1,40 @@
-from django.forms import ModelChoiceField
+from django.forms import ModelChoiceField, ModelForm
 from django.contrib import admin
 from .models import *
 
-# if we create a notebook there is no choice to change it to smartphone we need forms
+# if we create a notebook there must be no choice to change it to smartphone, so we need forms
+
+
+class SmartphoneAdminForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance and not instance.sd:
+            self.fields['sd_volume_max'].widget.attrs.update({
+                'readonly': True, 'style': 'backgroud: lightgray'
+            })
 
 
 class NotebookAdmin(admin.ModelAdmin):
 
+    # we use this to show only one variant in admin panel(if we choose notebook it is notebook)
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
+            # slug in this case is http://127.0.0.1:8000/admin/mainapp/notebook/
             return ModelChoiceField(Category.objects.filter(slug='notebooks'))
         return super().formfield_for_foreignkey(self, db_field, request, **kwargs)
 
 
 class SmartphoneAdmin(admin.ModelAdmin):
 
+    change_form_template = 'admin.html'
+    form = SmartphoneAdminForm
+
+    # we use this to show only one variant in admin panel(if we choose smartphone it is smartphone)
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
+             # slug in this case is http://127.0.0.1:8000/admin/mainapp/smartphones/
             return ModelChoiceField(Category.objects.filter(slug='smartphones'))
         return super().formfield_for_foreignkey(self, db_field, request, **kwargs)
 

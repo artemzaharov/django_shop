@@ -8,38 +8,43 @@ from django.urls import reverse
 
 User = get_user_model()
 
-# this function help to build url to all models(smart,note) to show them in one template product_detail.html
-# obj is product(smart,note) and viewname is name in our urls.py
-
 
 def get_product_url(obj, viewname):
+    # this function help to build url to all models(smartphone,notebook) to show them in one template product_detail.html
+    # obj is product(smart,note) and viewname is name in our urls.py
     ct_model = obj.__class__._meta.model_name
+    # ._meta.model_name is lowercase name of model
     return reverse(viewname, kwargs={'ct_model': ct_model, 'slug': obj.slug})
 
 
 class LatestProductsManager:
-
+    # this is our custom queryset
     @staticmethod
     def get_products_for_main_page(*args, **kwargs):
+        # we give in args models
         with_respect_to = kwargs.get('with_respect_to')
         products = []
+        # we find content type with model name notebook
         ct_models = ContentType.objects.filter(model__in=args)
         for ct_models in ct_models:
+            # we call parent class of our ct_model
             model_products = ct_models.model_class(
             )._base_manager.all().order_by('-id')[:5]
             products.extend(model_products)
         if with_respect_to:
+            # this is used for some products to be first
             ct_model = ContentType.objects.filter(model=with_respect_to)
             if ct_model.exists():
                 if with_respect_to in args:
                     return sorted(
+                        # ._meta.model_name is lowercase name of model
                         products, key=lambda x: x.__class__._meta.model_name.startswith(with_respect_to), reverse=True
                     )
         return products
 
 
 class LatestProducts:
-
+    # LatestProducts.objects.get_products_for_main_page('smartphone', 'notebook', with_respect_to='notebook')
     objects = LatestProductsManager()
 
 # Create your models here.
@@ -102,9 +107,9 @@ class Smartphone(Product):
     accum_volume = models.CharField(
         max_length=255, verbose_name="Объем батареи")
     ram = models.CharField(max_length=255, verbose_name="Оперативная память")
-    sd = models.BooleanField(default=True)
+    sd = models.BooleanField(default=True, verbose_name='Наличие SD карты')
     sd_volume_max = models.CharField(
-        max_length=255, verbose_name="Максимальный объем встраиваймой памяти")
+        max_length=255, null=True, blank=True, verbose_name="Максимальный объем встраиваймой памяти")
     main_cam_mp = models.CharField(
         max_length=255, verbose_name="Главная камера")
     frontal_cam_mp = models.CharField(
@@ -115,6 +120,12 @@ class Smartphone(Product):
 
     def get_absolute_url(self):
         return get_product_url(self, 'product_detail')
+
+    # @property
+    # def sd(self):
+    #     if self.sd:
+    #         return 'Да'
+    #     return 'Нет'
 
 
 class CartProduct(models.Model):
