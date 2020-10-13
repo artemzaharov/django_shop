@@ -55,8 +55,10 @@ def get_product_spec(product, model_name):
 
 @register.filter
 def product_spec(product):
+    # restart server after first use template tag
     model_name = product.__class__._meta.model_name
     if isinstance(product, Smartphone):
+        # if there is no flag in sd card in admin panel dont render it on page
         if not product.sd:
             PRODUCT_SPEC['smartphone'].pop(
                 'Максимальный объем встраиваймой памяти')
