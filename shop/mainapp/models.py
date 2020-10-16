@@ -55,8 +55,8 @@ class LatestProducts:
 class CategoryManager(models.Manager):
 
     CATEGORY_NAME_COUNT_NAME = {
-        'Ноутбуки':'notebook__count',
-        'Смартфоны':'smartphone__count'
+        'Ноутбуки': 'notebook__count',
+        'Смартфоны': 'smartphone__count'
     }
 
     def get_queryset(self):
@@ -74,6 +74,7 @@ class Category(models.Model):
     """ Категории товаров """
     name = models.CharField(max_length=255, verbose_name="Имя категории")
     slug = models.SlugField(unique=True)
+    #for count of our models instances
     objects = CategoryManager()
 
     def __str__(self):

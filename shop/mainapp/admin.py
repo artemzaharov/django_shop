@@ -7,10 +7,11 @@ class SmartphoneAdminForm(ModelForm):
     # show grey sd_volume_max form if sd is false 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # instance of our model
         instance = kwargs.get('instance')
         if instance and not instance.sd:
             self.fields['sd_volume_max'].widget.attrs.update({
-                'readonly': True, 'style': 'backgroud: lightgray'
+                'readonly': True, 'style': 'background: lightgray'
             })
 
     def clean(self):
